@@ -1,0 +1,24 @@
+{ 
+  "user":{
+    "code": 200,
+    "user":{
+        "userid": "@id()",
+        "username": "@cname()",
+        "date": "@date()",
+        "avatar": "@image('200x200','@color()','#fff','avatar')",
+        "description": "@cparagraph()",
+        "email": "@email()"
+    }
+  },
+  "tasks":{
+    "code": 200,
+    "tasks|1-10":[
+      {
+          "title": "@title()",
+          "description": "@paragraph()",
+          "date": "@now()",
+          "finished|1": true        
+      }
+    ]
+  }
+}
