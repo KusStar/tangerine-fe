@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config ./build/webpack.dev.js"
+    "dev": "webpack-dev-server --config ./build/webpack.dev.js",
+    "prettier": "prettier -c --write \"**/*\""
   },
   "author": "",
   "license": "MIT",
@@ -25,6 +26,7 @@
     "awesome-typescript-loader": "^5.2.1",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-webpack-plugin": "^3.2.0",
+    "prettier": "1.19.1",
     "typescript": "^3.7.3",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
