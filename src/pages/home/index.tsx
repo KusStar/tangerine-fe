@@ -5,7 +5,7 @@ import Drawer from '@/components/Drawer'
 import AddTask from '@/components/AddTask'
 import { Container, Collapse } from '@material-ui/core'
 import request from '@/utils/request';
-import { Task } from '@/interfaces';
+import { Task } from "@/interfaces"
 import TasksLayout from '@/layouts/TasksLayout';
 import useStyles from './style';
 
@@ -35,6 +35,14 @@ const Home: React.FC<RouteComponentProps> = props => {
 
     setTasks(newTasks);
   }
+
+  const handleAdded = (task: Task) => {
+    const oldTasks = tasks.filter(it => it.title !== task.title);
+    const newTasks = [task, ...oldTasks];
+
+    setTasks(newTasks);
+    setAddTaskOpen(false);
+  }
   return (
     <div>
       <HeaderBar 
@@ -43,20 +51,23 @@ const Home: React.FC<RouteComponentProps> = props => {
         addTaskOpen={addTaskOpen}
       />
       <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
-        <Container className={styles.container}>
-          <Collapse in={!addTaskOpen}>
+      <Container className={styles.container}>
+        <Collapse in={!addTaskOpen}>
+          {!addTaskOpen && 
             <TasksLayout 
               tasks={tasks}
               onCheck={onCheck}
             />
-          </Collapse>
-          {addTaskOpen && 
-            <AddTask 
-              open={addTaskOpen}
-              onClose={() => setAddTaskOpen(false)}
-            />
           }
-        </Container>
+        </Collapse>
+        {addTaskOpen && 
+          <AddTask 
+            open={addTaskOpen}
+            onClose={() => setAddTaskOpen(false)}
+            handleAdded={handleAdded}
+          />
+        }
+      </Container>
     </div>
   )
 }

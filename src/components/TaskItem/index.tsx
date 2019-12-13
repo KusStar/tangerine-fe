@@ -6,19 +6,26 @@ import {
   ExpansionPanelDetails,
   Typography,
   Checkbox,
+  Tooltip
 } from '@material-ui/core';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
 import dateFormatter from '@/utils/formatter/date';
 
+const {
+  auto,
+  normal
+} = dateFormatter;
 interface IProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
+  date: string;
   finished: boolean;
   onCheck?: () => void;
 }
 const TaskItem: React.FC<IProps> = ({ 
   title,
   subtitle,
+  date,
   finished,
   onCheck
 })  => {
@@ -30,8 +37,7 @@ const TaskItem: React.FC<IProps> = ({
     event.preventDefault();
     event.stopPropagation();
   }
-
-  const dateText = dateFormatter(subtitle);
+  
   return (
     <ExpansionPanel>
       <ExpansionPanelSummary
@@ -45,10 +51,17 @@ const TaskItem: React.FC<IProps> = ({
           style={textStyle}
         />
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        <Typography color="textSecondary">
-          {dateText}
-        </Typography>
+      <ExpansionPanelDetails style={{flexDirection:'column'}}>
+        {subtitle && 
+          <Typography>
+            {subtitle}
+          </Typography>
+        }
+        <Tooltip title={normal(date)}>
+          <Typography color="textSecondary">
+            {auto(date)}
+          </Typography>
+        </Tooltip>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );

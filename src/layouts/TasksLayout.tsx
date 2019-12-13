@@ -3,11 +3,12 @@ import {
   Typography,
   ExpansionPanel,
   ExpansionPanelSummary,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
+  Fade
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TaskItem from '@/components/TaskItem';
-import { Task } from '@/interfaces';
+import { Task } from "@/interfaces";
 
 
 interface IProps {
@@ -21,41 +22,46 @@ const TasksLayout: React.FC<IProps> = ({
 }) => {
   const unfinishedTasks = tasks.filter(task => task.finished === false);
   const finishedTasks = tasks.filter(task => task.finished === true);
+
   return (
     <>
     {finishedTasks.length > 0 &&
-      <ExpansionPanel style={{
-        background: 0
-      }}>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>{finishedTasks.length} Finished</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails style={{ 
-          flexDirection: 'column',
-          padding:0,
+      <Fade in={finishedTasks.length > 0}>
+        <ExpansionPanel style={{
+          background: 0
         }}>
-          {finishedTasks.map((task, i) => (
-              <TaskItem 
-                key={i}
-                title={task.title}
-                subtitle={task.date}
-                finished={true}
-                onCheck={() => onCheck(task)}
-              />
-          ))}
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <Typography>{finishedTasks.length} Finished</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={{ 
+            flexDirection: 'column',
+            padding:0,
+          }}>
+            {finishedTasks.map((task, i) => (
+                <TaskItem 
+                  key={i}
+                  title={task.title}
+                  subtitle={task.description}
+                  date={task.date}
+                  finished={true}
+                  onCheck={() => onCheck(task)}
+                />
+            ))}
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </Fade>
     }
     {unfinishedTasks.map((task, i) => {
       return (
         <TaskItem 
           key={i}
           title={task.title}
-          subtitle={task.date}
+          subtitle={task.description}
+          date={task.date}
           finished={false}
           onCheck={() => onCheck(task)}
         />

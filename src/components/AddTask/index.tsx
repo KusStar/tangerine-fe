@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 import { Add } from '@material-ui/icons';
 
-import { Task } from "@/interfaces/Task";
+import { Task } from "@/interfaces";
 
 import Snackbar from '@/components/Snackbar';
 
