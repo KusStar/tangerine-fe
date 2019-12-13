@@ -9,7 +9,11 @@ const deltaTime = (now: Date, past: Date): number => {
   return now.getTime() - past.getTime();
 }
 
-const dateText = (delta: number): string => {
+const pad = (str: any): string => {
+  return str.toString().padStart(2, '0');
+}
+
+const custom = (delta: number): string => {
   const {
     oneDay,
     oneHour,
@@ -28,16 +32,29 @@ const dateText = (delta: number): string => {
   }
 }
 
-const dateFormatter = (timestamp: string) => {
+const normal = (date: Date | string): string => {
+  if(typeof date === 'string') date = new Date(parseInt(date, 10));
+  const [year, month, day] = [
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+  ]
+  const time = date.toTimeString().slice(0,8);
+  return `${year}-${pad(month)}-${pad(day)} ${time}`;
+}
+
+const auto = (timestamp: string) => {
   const targetDate = new Date(parseInt(timestamp, 10));
   const currentDate = new Date();
   const delta = deltaTime(currentDate, targetDate);
   if (delta > timestampRange.tenDays) {
-    return targetDate.toDateString();
+    return normal(targetDate);
   } else {
-    return dateText(delta);
+    return custom(delta);
   }
 }
 
-
-export default dateFormatter;
+export default {
+  auto,
+  normal
+};
