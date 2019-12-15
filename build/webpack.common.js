@@ -1,5 +1,5 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -7,28 +7,38 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: "[name].[hash:8].js"
+    filename: '[name].[hash:8].js'
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'awesome-typescript-loader'
+        use: [
+          { loader: 'cache-loader' },
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+              experimentalWatchApi: true,
+              happyPackMode: true
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
-      },
+      }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html')
-    }),
+    })
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, '../src/')
+      '@': path.resolve(__dirname, '../src/')
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx']
   }
