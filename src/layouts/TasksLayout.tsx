@@ -1,28 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Typography,
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Fade
+  Fade,
+  Popover,
+  IconButton
 } from '@material-ui/core'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { ExpandMore, Delete, Edit} from '@material-ui/icons';
+
+import { CurrentTarget } from '@/components/useLongPress';
 import TaskItem from '@/components/TaskItem';
 import { Task } from "@/interfaces";
-
 
 interface IProps {
   tasks: Task[];
   onCheck: (task: Task) => void;
+  onDelete: (task: Task) => void;
 }
-
 const TasksLayout: React.FC<IProps> = ({ 
   tasks,
-  onCheck
+  onCheck,
+  onDelete
 }) => {
+  const [anchorEl, setAnchorEl] = useState<CurrentTarget>(null);
+  const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const unfinishedTasks = tasks.filter(task => task.finished === false);
   const finishedTasks = tasks.filter(task => task.finished === true);
 
+  
+  const open = Boolean(anchorEl);
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+  const handleLongPress = (target?: CurrentTarget, task?: Task) => {
+    if (target && task) {
+      setAnchorEl(target);
+      setCurrentTask(task);
+    }
+  }
+  const handleDelete = () => {
+    if (currentTask) {
+      handlePopoverClose();
+      onDelete(currentTask);
+    }
+  }
   return (
     <>
     {finishedTasks.length > 0 &&
@@ -31,7 +54,7 @@ const TasksLayout: React.FC<IProps> = ({
           background: 0
         }}>
           <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMore/>}
             aria-controls="panel2a-content"
             id="panel2a-header"
           >
@@ -42,14 +65,14 @@ const TasksLayout: React.FC<IProps> = ({
             padding:0,
           }}>
             {finishedTasks.map((task, i) => (
-                <TaskItem 
-                  key={i}
-                  title={task.title}
-                  subtitle={task.description}
-                  date={task.date}
-                  finished={true}
-                  onCheck={() => onCheck(task)}
-                />
+              <TaskItem 
+                key={i}
+                title={task.title}
+                subtitle={task.description}
+                date={task.date}
+                finished={true}
+                onCheck={() => onCheck(task)}
+              />
             ))}
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -64,11 +87,34 @@ const TasksLayout: React.FC<IProps> = ({
           date={task.date}
           finished={false}
           onCheck={() => onCheck(task)}
+          onLongPress={(t?: CurrentTarget) => handleLongPress(t, task)}
         />
       )
     })}
+    
+    <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handlePopoverClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'center',
+          horizontal: 'center',
+        }}
+      >
+          <IconButton onClick={handleDelete}>
+            <Delete />
+          </IconButton>
+          <IconButton onClick={handleDelete}>
+            <Edit />
+          </IconButton>
+      </Popover>
     </>
   )
 }
+
 
 export default TasksLayout;

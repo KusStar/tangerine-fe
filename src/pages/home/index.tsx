@@ -33,16 +33,24 @@ const Home: React.FC<RouteComponentProps> = props => {
   //     } = res;
   //   })
   // }, [])
-
-  const onCheck = (task:Task) => {
-    const index = tasks.findIndex(it => 
+  const targetTaskIndex = (task: Task) => {
+    return tasks.findIndex(it => 
       it.title === task.title && it.date === task.date);
+  }
+  const onCheck = (task:Task) => {
+    const index = targetTaskIndex(task); 
     const newTasks = tasks.filter((_, i) => i !== index);
     const newTask = tasks[index];
     newTask.date = new Date().getTime().toString();
     newTask.finished = !newTask.finished;
     newTasks.splice(0, 0, newTask);
 
+    setTasks(newTasks);
+  }
+
+  const onDelete = (task: Task) => {
+    const index = targetTaskIndex(task);
+    const newTasks = tasks.filter((_, i) => i !== index);
     setTasks(newTasks);
   }
 
@@ -74,6 +82,7 @@ const Home: React.FC<RouteComponentProps> = props => {
           <TasksLayout 
             tasks={tasks}
             onCheck={onCheck}
+            onDelete={onDelete}
           />
         }
       </Container>

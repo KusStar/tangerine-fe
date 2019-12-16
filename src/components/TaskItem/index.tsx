@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, useState, FocusEvent } from 'react';
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -6,10 +6,12 @@ import {
   ExpansionPanelDetails,
   Typography,
   Checkbox,
-  Tooltip
+  Tooltip,
 } from '@material-ui/core';
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
 import dateFormatter from '@/utils/formatter/date';
+import useLongPress from '@/components/useLongPress';
+import { CurrentTarget } from '@/components/useLongPress';
 
 const {
   auto,
@@ -21,32 +23,38 @@ interface IProps {
   date: string;
   finished: boolean;
   onCheck?: () => void;
+  onLongPress?: (t?: CurrentTarget) => void;
 }
 const TaskItem: React.FC<IProps> = ({ 
   title,
   subtitle,
   date,
   finished,
-  onCheck
+  onCheck,
+  onLongPress,
 })  => {
   const textStyle = finished === true ? {
     textDecoration: 'line-through',
   } : {};
 
-  const defaultEvent = (event: MouseEvent) => {
+  const defaultEvent = (event: MouseEvent | FocusEvent) => {
     event.preventDefault();
     event.stopPropagation();
   }
-  
+
+  const longPressEvent = onLongPress ? useLongPress(onLongPress) : Object.create(null);
+
   return (
-    <ExpansionPanel>
+    <ExpansionPanel {...longPressEvent}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         aria-label="Expand"
+        onClick={(e) => e.preventDefault()}
       >
         <FormControlLabel
           control={<Checkbox color="secondary" checked={finished} onChange={onCheck}/>}
           onClick={defaultEvent}
+          onFocus={defaultEvent}
           label={title}
           style={textStyle}
         />
