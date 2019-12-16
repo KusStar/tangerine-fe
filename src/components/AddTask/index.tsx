@@ -67,7 +67,7 @@ const AddTask: React.FC<IProps> = ({ open, onClose, handleAdded }) => {
             <TextField
               autoFocus
               margin="dense"
-              label="Todo"
+              label="Title"
               fullWidth
               color="secondary"
               multiline
