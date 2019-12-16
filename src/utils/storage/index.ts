@@ -9,6 +9,6 @@ export default {
     return JSON.parse(localStorage.getItem(KEYS.tasks) || '[]')
   },
   set tasks(newTasks: Task[]) {
-    localStorage.setItem(KEYS.tasks, JSON.stringify(newTasks || []));
+    newTasks && localStorage.setItem(KEYS.tasks, JSON.stringify(newTasks));
   }
 }
