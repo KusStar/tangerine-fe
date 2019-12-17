@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   TextField,
   Card,
@@ -9,14 +9,13 @@ import {
 } from '@material-ui/core'
 import { Add } from '@material-ui/icons';
 
-import { Task } from "@/interfaces";
+import { Task, EditState } from "@/interfaces";
 
 import Snackbar from '@/components/Snackbar';
 
 interface IProps {
-  open: boolean;
-  onClose: () => void;
-  handleAdded: (task: Task) => void;
+  onAdd: (task: Task, editState: EditState) => void;
+  editState: EditState;
 }
 interface IState {
   title: string;
@@ -25,22 +24,36 @@ interface IState {
 
 const INPUT_SOMETHING = 'You must input something';
 
-const AddTask: React.FC<IProps> = ({ open, onClose, handleAdded }) => {
+const AddTask: React.FC < IProps > = ({
+    onAdd,
+    editState
+  }) => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [values, setValues] = useState<IState>({
     title: '',
     description: '',
   });
+  
+  useEffect(() => {
+    const { editedTask } = editState;
+    if (editedTask) {
+      setValues({
+        title: editedTask.title,
+        description: editedTask.description
+      })
+    }
+  }, [editState.editedTask])
+
   const handleChange = (prop: keyof IState) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [prop]: event.target.value });
   };
-
-  const onAdd = () => {
+  
+  const handleAdd = () => {
     const { 
       title,
       description
     } = values;
-    if(!title) {
+    if (!title) {
       snackbarOpen === false && setSnackbarOpen(true);
       return;
     }
@@ -50,11 +63,12 @@ const AddTask: React.FC<IProps> = ({ open, onClose, handleAdded }) => {
       date: new Date().getTime().toString(),
       finished: false
     }
-    handleAdded(task);
+    onAdd(task, editState);
   }
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   }
+
   return (
     <Container style={{ 
       display: 'flex',
@@ -72,6 +86,7 @@ const AddTask: React.FC<IProps> = ({ open, onClose, handleAdded }) => {
               color="secondary"
               multiline
               onChange={handleChange('title')}
+              value={values.title}
             />
             <TextField
               margin="dense"
@@ -80,12 +95,13 @@ const AddTask: React.FC<IProps> = ({ open, onClose, handleAdded }) => {
               color="secondary"
               multiline
               onChange={handleChange('description')}
+              value={values.description}
             />
           </form>
         </CardContent>
       </Card>
       <Box mt={2}>
-        <Fab color="primary" onClick={onAdd}>
+        <Fab color="primary" onClick={handleAdd}>
           <Add />
         </Fab>
       </Box>

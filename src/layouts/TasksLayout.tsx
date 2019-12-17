@@ -18,18 +18,19 @@ interface IProps {
   tasks: Task[];
   onCheck: (task: Task) => void;
   onDelete: (task: Task) => void;
+  onEdit: (task: Task) => void;
 }
 const TasksLayout: React.FC<IProps> = ({ 
   tasks,
   onCheck,
-  onDelete
+  onDelete,
+  onEdit
 }) => {
   const [anchorEl, setAnchorEl] = useState<CurrentTarget>(null);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const unfinishedTasks = tasks.filter(task => task.finished === false);
   const finishedTasks = tasks.filter(task => task.finished === true);
 
-  
   const open = Boolean(anchorEl);
   const handlePopoverClose = () => {
     setAnchorEl(null);
@@ -44,6 +45,12 @@ const TasksLayout: React.FC<IProps> = ({
     if (currentTask) {
       handlePopoverClose();
       onDelete(currentTask);
+    }
+  }
+  const handleEdit = () => {
+    if (currentTask) {
+      handlePopoverClose();
+      onEdit(currentTask);
     }
   }
   return (
@@ -72,6 +79,7 @@ const TasksLayout: React.FC<IProps> = ({
                 date={task.date}
                 finished={true}
                 onCheck={() => onCheck(task)}
+                onLongPress={(t?: CurrentTarget) => handleLongPress(t, task)}
               />
             ))}
           </ExpansionPanelDetails>
@@ -108,7 +116,7 @@ const TasksLayout: React.FC<IProps> = ({
           <IconButton onClick={handleDelete}>
             <Delete />
           </IconButton>
-          <IconButton onClick={handleDelete}>
+          <IconButton onClick={handleEdit}>
             <Edit />
           </IconButton>
       </Popover>

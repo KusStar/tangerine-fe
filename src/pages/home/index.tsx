@@ -5,21 +5,24 @@ import Drawer from '@/components/Drawer'
 import AddTask from '@/components/AddTask'
 import { Container } from '@material-ui/core'
 import request from '@/utils/request';
-import { Task } from "@/interfaces"
+import Filter from '@/utils/filter';
+import { Task, EditState } from "@/interfaces"
 import TasksLayout from '@/layouts/TasksLayout';
 import storage from '@/utils/storage'
 
 import useStyles from './style';
-
 
 const Home: React.FC<RouteComponentProps> = props => {
   const styles = useStyles();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [addTaskOpen, setAddTaskOpen] = useState<boolean>(false);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [editState, setEditState] = useState<EditState>({
+    editing: false,
+  })
 
   useEffect(() => {
-    setTasks(storage.tasks);
+    setTasks(storage.tasks)
   }, []);
 
   useEffect(() => {
@@ -33,10 +36,19 @@ const Home: React.FC<RouteComponentProps> = props => {
   //     } = res;
   //   })
   // }, [])
+
   const targetTaskIndex = (task: Task) => {
     return tasks.findIndex(it => 
       it.title === task.title && it.date === task.date);
   }
+
+  const onAdd = (task: Task, editState: EditState) => {
+    let oldTasks = Filter.tasks(tasks, task, editState);
+    const newTasks = [task, ...oldTasks];
+    setTasks(newTasks);
+    setAddTaskOpen(false);
+  }
+  
   const onCheck = (task:Task) => {
     const index = targetTaskIndex(task); 
     const newTasks = tasks.filter((_, i) => i !== index);
@@ -54,15 +66,15 @@ const Home: React.FC<RouteComponentProps> = props => {
     setTasks(newTasks);
   }
 
-  const handleAdded = (task: Task) => {
-    const oldTasks = tasks.filter(it => 
-      it.title !== task.title || it.description !== task.description);
-    const newTasks = [task, ...oldTasks];
+  const onEdit = (task: Task) => {
+    setAddTaskOpen(true);
 
-    setTasks(newTasks);
-    setAddTaskOpen(false);
+    setEditState({
+      editing: true,
+      editedTask: task
+    });
   }
-  
+
   return (
     <div>
       <HeaderBar 
@@ -74,15 +86,15 @@ const Home: React.FC<RouteComponentProps> = props => {
       <Container className={styles.container}>
         {addTaskOpen ? 
           <AddTask 
-            open={addTaskOpen}
-            onClose={() => setAddTaskOpen(false)}
-            handleAdded={handleAdded}
+            onAdd={onAdd}
+            editState={editState}
           />
         :
           <TasksLayout 
             tasks={tasks}
             onCheck={onCheck}
             onDelete={onDelete}
+            onEdit={onEdit}
           />
         }
       </Container>
