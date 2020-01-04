@@ -1,18 +1,17 @@
-import { Task, EditState } from "@/interfaces"
+import { Task, EditState } from '@/interfaces'
 
-const filterTasksCondition = (source: Task, target: Task) => 
+const filterTasksCondition = (source: Task, target: Task) =>
   !(source.title === target.title && source.description === target.description)
 
 const tasks = (tasks: Task[], newTask: Task, editState?: EditState) => {
-  let filteredTasks = tasks.filter(it => filterTasksCondition(it, newTask));
+  let filteredTasks = tasks.filter(it => filterTasksCondition(it, newTask))
 
   if (editState && editState.editedTask) {
-    const { editedTask } = editState;
+    const { editedTask } = editState
     filteredTasks = tasks.filter(it => filterTasksCondition(it, editedTask))
   }
-  return filteredTasks;
+  return filteredTasks
 }
-
 
 export default {
   tasks

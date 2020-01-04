@@ -1,4 +1,4 @@
-import { Task } from "@/interfaces";
+import { Task } from '@/interfaces'
 
 const KEYS = {
   tasks: 'tasks'
@@ -9,6 +9,6 @@ export default {
     return JSON.parse(localStorage.getItem(KEYS.tasks) || '[]')
   },
   set tasks(newTasks: Task[]) {
-    newTasks && localStorage.setItem(KEYS.tasks, JSON.stringify(newTasks));
+    newTasks && localStorage.setItem(KEYS.tasks, JSON.stringify(newTasks))
   }
 }

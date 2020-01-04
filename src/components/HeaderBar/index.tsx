@@ -16,27 +16,26 @@ import {
 const appName = 'Tangerine'
 
 interface WindowProps {
-  window?: () => Window;
-  children: React.ReactElement;
+  window?: () => Window
+  children: React.ReactElement
 }
 
-const HideOnScroll: React.FC<WindowProps> = (props) => {
-  const { children, window } = props;
-  const trigger = useScrollTrigger({ target: window ? window() : undefined });
+const HideOnScroll: React.FC<WindowProps> = props => {
+  const { children, window } = props
+  const trigger = useScrollTrigger({ target: window ? window() : undefined })
 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       {children}
     </Slide>
-  );
+  )
 }
 
-
 interface IProps {
-  title?: string;
-  onMenu?: () => void;
-  onAdd?: () => void;
-  addTaskOpen?: boolean;
+  title?: string
+  onMenu?: () => void
+  onAdd?: () => void
+  addTaskOpen?: boolean
 }
 
 const HeaderBar: React.FC<IProps> = ({ title, onMenu, onAdd, addTaskOpen }) => (
@@ -51,22 +50,16 @@ const HeaderBar: React.FC<IProps> = ({ title, onMenu, onAdd, addTaskOpen }) => (
         >
           <MenuIcon />
         </IconButton>
-        
-        <Typography style={{ flexGrow: 1 }}>{title ? title : appName}</Typography>
 
-        {onAdd && 
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={onAdd}
-          >
-            {addTaskOpen === true ? 
-              <CloseIcon />
-            :
-              <AddIcon />
-            }
+        <Typography style={{ flexGrow: 1 }}>
+          {title ? title : appName}
+        </Typography>
+
+        {onAdd && (
+          <IconButton edge="start" color="inherit" onClick={onAdd}>
+            {addTaskOpen === true ? <CloseIcon /> : <AddIcon />}
           </IconButton>
-        }
+        )}
       </Toolbar>
     </AppBar>
   </HideOnScroll>

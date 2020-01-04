@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState, FocusEvent } from 'react';
+import React, { MouseEvent, useState, FocusEvent } from 'react'
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -6,72 +6,70 @@ import {
   ExpansionPanelDetails,
   Typography,
   Checkbox,
-  Tooltip,
-} from '@material-ui/core';
+  Tooltip
+} from '@material-ui/core'
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
-import dateFormatter from '@/utils/formatter/date';
-import useLongPress from '@/components/useLongPress';
-import { CurrentTarget } from '@/components/useLongPress';
+import dateFormatter from '@/utils/formatter/date'
+import useLongPress from '@/components/useLongPress'
+import { CurrentTarget } from '@/components/useLongPress'
 
-const {
-  auto,
-  normal
-} = dateFormatter;
+const { auto, normal } = dateFormatter
 interface IProps {
-  title: string;
-  subtitle?: string;
-  date: string;
-  finished: boolean;
-  onCheck?: () => void;
-  onLongPress?: (t?: CurrentTarget) => void;
+  title: string
+  subtitle?: string
+  date: string
+  finished: boolean
+  onCheck?: () => void
+  onLongPress?: (t?: CurrentTarget) => void
 }
-const TaskItem: React.FC<IProps> = ({ 
+const TaskItem: React.FC<IProps> = ({
   title,
   subtitle,
   date,
   finished,
   onCheck,
-  onLongPress,
-})  => {
-  const textStyle = finished === true ? {
-    textDecoration: 'line-through',
-  } : {};
+  onLongPress
+}) => {
+  const textStyle =
+    finished === true
+      ? {
+          textDecoration: 'line-through'
+        }
+      : {}
 
   const defaultEvent = (event: MouseEvent | FocusEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
+    event.preventDefault()
+    event.stopPropagation()
   }
 
-  const longPressEvent = onLongPress ? useLongPress(onLongPress) : Object.create(null);
+  const longPressEvent = onLongPress
+    ? useLongPress(onLongPress)
+    : Object.create(null)
 
   return (
     <ExpansionPanel {...longPressEvent}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         aria-label="Expand"
-        onClick={(e) => e.preventDefault()}
+        onClick={e => e.preventDefault()}
       >
         <FormControlLabel
-          control={<Checkbox color="secondary" checked={finished} onChange={onCheck}/>}
+          control={
+            <Checkbox color="secondary" checked={finished} onChange={onCheck} />
+          }
           onClick={defaultEvent}
           onFocus={defaultEvent}
           label={title}
           style={textStyle}
         />
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails style={{flexDirection:'column'}}>
-        {subtitle && 
-          <Typography>
-            {subtitle}
-          </Typography>
-        }
+      <ExpansionPanelDetails style={{ flexDirection: 'column' }}>
+        {subtitle && <Typography>{subtitle}</Typography>}
         <Tooltip title={normal(date)}>
-          <Typography color="textSecondary">
-            {auto(date)}
-          </Typography>
+          <Typography color="textSecondary">{auto(date)}</Typography>
         </Tooltip>
       </ExpansionPanelDetails>
     </ExpansionPanel>
-  );
+  )
 }
-export default TaskItem;
+export default TaskItem

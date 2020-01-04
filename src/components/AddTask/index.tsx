@@ -7,35 +7,32 @@ import {
   Fab,
   Box
 } from '@material-ui/core'
-import { Add } from '@material-ui/icons';
+import { Add } from '@material-ui/icons'
 
-import { Task, EditState } from "@/interfaces";
+import { Task, EditState } from '@/interfaces'
 
-import Snackbar from '@/components/Snackbar';
+import Snackbar from '@/components/Snackbar'
 
 interface IProps {
-  onAdd: (task: Task, editState: EditState) => void;
-  editState: EditState;
+  onAdd: (task: Task, editState: EditState) => void
+  editState: EditState
 }
 interface IState {
-  title: string;
-  description: string;
+  title: string
+  description: string
 }
 
-const INPUT_SOMETHING = 'You must input something';
+const INPUT_SOMETHING = 'You must input something'
 
-const AddTask: React.FC < IProps > = ({
-    onAdd,
-    editState
-  }) => {
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+const AddTask: React.FC<IProps> = ({ onAdd, editState }) => {
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
   const [values, setValues] = useState<IState>({
     title: '',
-    description: '',
-  });
-  
+    description: ''
+  })
+
   useEffect(() => {
-    const { editedTask } = editState;
+    const { editedTask } = editState
     if (editedTask) {
       setValues({
         title: editedTask.title,
@@ -44,18 +41,17 @@ const AddTask: React.FC < IProps > = ({
     }
   }, [editState.editedTask])
 
-  const handleChange = (prop: keyof IState) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-  
+  const handleChange = (prop: keyof IState) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
+
   const handleAdd = () => {
-    const { 
-      title,
-      description
-    } = values;
+    const { title, description } = values
     if (!title) {
-      snackbarOpen === false && setSnackbarOpen(true);
-      return;
+      snackbarOpen === false && setSnackbarOpen(true)
+      return
     }
     const task: Task = {
       title,
@@ -63,19 +59,21 @@ const AddTask: React.FC < IProps > = ({
       date: new Date().getTime().toString(),
       finished: false
     }
-    onAdd(task, editState);
+    onAdd(task, editState)
   }
   const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
+    setSnackbarOpen(false)
   }
 
   return (
-    <Container style={{ 
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center'
-    }}>
-      <Card style={{ width:"100%" }}>
+    <Container
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+    >
+      <Card style={{ width: '100%' }}>
         <CardContent>
           <form>
             <TextField
@@ -106,12 +104,12 @@ const AddTask: React.FC < IProps > = ({
         </Fab>
       </Box>
 
-      <Snackbar 
+      <Snackbar
         open={snackbarOpen}
         message={INPUT_SOMETHING}
         handleClose={handleSnackbarClose}
       />
-  </Container>
+    </Container>
   )
 }
 

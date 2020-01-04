@@ -21,9 +21,9 @@ module.exports = {
               transpileOnly: true,
               experimentalWatchApi: true,
               happyPackMode: true
-            },
-          },
-        ],
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,

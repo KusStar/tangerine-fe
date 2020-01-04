@@ -24,6 +24,6 @@ module.exports = merge(common, {
         messages: ['Go: http://localhost:8081']
       }
     }),
-    new webpack.HotModuleReplacementPlugin(),
-  ],
+    new webpack.HotModuleReplacementPlugin()
+  ]
 })
