@@ -3,11 +3,18 @@ import { RouteComponentProps } from 'react-router-dom'
 import HeaderBar from '@/components/HeaderBar'
 import Drawer from '@/components/Drawer'
 import AddTask from '@/components/AddTask'
-import { Container } from '@material-ui/core'
+import { Container, Snackbar, Button } from '@material-ui/core'
 import request from '@/utils/request'
 import Filter from '@/utils/filter'
-import { Task, EditState } from '@/interfaces'
+import {
+  Task,
+  EditState,
+  SnackbarState,
+  SelectorState,
+  IconNameType
+} from '@/interfaces'
 import TasksLayout from '@/layouts/TasksLayout'
+import Selector from '@/components/Selector'
 import storage from '@/utils/storage'
 
 import useStyles from './style'
@@ -20,6 +27,14 @@ const Home: React.FC<RouteComponentProps> = props => {
   const [requested, setRequested] = useState<boolean>(false)
   const [editState, setEditState] = useState<EditState>({
     editing: false
+  })
+  const [snackbarState, setSnackbarState] = useState<SnackbarState>({
+    open: false,
+    title: ''
+  })
+  const [selectorState, setSelectorState] = useState<SelectorState>({
+    open: false,
+    checked: []
   })
 
   useEffect(() => {
@@ -64,8 +79,15 @@ const Home: React.FC<RouteComponentProps> = props => {
   const onAdd = (task: Task, editState: EditState) => {
     let oldTasks = Filter.tasks(tasks, task, editState)
     const newTasks = [task, ...oldTasks]
-    setTasks(newTasks)
     setAddTaskOpen(false)
+
+    setSnackbarState({
+      open: true,
+      title: snackbarState.title || 'Added',
+      targetTask: task,
+      pastTasks: tasks
+    })
+    setTasks(newTasks)
   }
 
   const onCheck = (task: Task) => {
@@ -79,9 +101,14 @@ const Home: React.FC<RouteComponentProps> = props => {
     setTasks(newTasks)
   }
 
-  const onDelete = (task: Task) => {
-    const index = targetTaskIndex(task)
-    const newTasks = tasks.filter((_, i) => i !== index)
+  const onDelete = (targetIndexArray: number[]) => {
+    const newTasks = tasks.filter((_, i) => targetIndexArray.indexOf(i) === -1)
+
+    setSnackbarState({
+      open: true,
+      title: 'Deleted',
+      pastTasks: tasks
+    })
     setTasks(newTasks)
   }
 
@@ -92,6 +119,51 @@ const Home: React.FC<RouteComponentProps> = props => {
       editing: true,
       editedTask: task
     })
+
+    setSnackbarState({
+      ...snackbarState,
+      title: 'Updated'
+    })
+  }
+
+  const onIconButton = (iconName: IconNameType) => {
+    let newChecked = selectorState.checked
+    let newOpen = selectorState.open
+    switch (iconName) {
+      case 'SelectAll':
+        newChecked = Array.from(new Array(tasks.length).keys())
+        break
+      case 'ClearAll':
+        newChecked = []
+        break
+      case 'Edit':
+        const targetTaskIndex = selectorState.checked[0]
+        onEdit(tasks[targetTaskIndex])
+        newOpen = false
+        newChecked = []
+        break
+      case 'Delete':
+        onDelete(selectorState.checked)
+        newOpen = false
+        newChecked = []
+    }
+    setSelectorState({
+      open: newOpen,
+      checked: newChecked
+    })
+  }
+
+  const handleSnackbarClose = (undo: boolean) => {
+    if (undo === true && snackbarState.pastTasks) {
+      setTasks(snackbarState.pastTasks)
+    } else {
+      // TODO: request remote API
+      // Add task or delete task
+    }
+    setSnackbarState({
+      open: false,
+      title: ''
+    })
   }
 
   return (
@@ -100,20 +172,59 @@ const Home: React.FC<RouteComponentProps> = props => {
         onMenu={() => setDrawerOpen(true)}
         onAdd={() => setAddTaskOpen(!addTaskOpen)}
         addTaskOpen={addTaskOpen}
+        selectorState={selectorState}
+        setSelectorState={newSelectorState =>
+          setSelectorState(newSelectorState)
+        }
+        onIconButton={iconName => onIconButton(iconName)}
       />
       <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <Container className={styles.container}>
-        {addTaskOpen ? (
-          <AddTask onAdd={onAdd} editState={editState} />
-        ) : (
-          <TasksLayout
+        {selectorState.open === true ? (
+          <Selector
             tasks={tasks}
-            onCheck={onCheck}
-            onDelete={onDelete}
-            onEdit={onEdit}
+            checked={selectorState.checked}
+            setChecked={(checked: number[]) =>
+              setSelectorState({
+                ...selectorState,
+                checked: checked
+              })
+            }
           />
+        ) : (
+          <>
+            {addTaskOpen ? (
+              <AddTask onAdd={onAdd} editState={editState} />
+            ) : (
+              <TasksLayout
+                tasks={tasks}
+                onCheck={onCheck}
+                setChecked={(checked: number[]) =>
+                  setSelectorState({
+                    open: true,
+                    checked: checked
+                  })
+                }
+              />
+            )}
+          </>
         )}
       </Container>
+      <Snackbar
+        open={snackbarState.open}
+        onClose={() => handleSnackbarClose(false)}
+        message={<span>{snackbarState.title}</span>}
+        action={[
+          <Button
+            key="undo"
+            color="secondary"
+            size="small"
+            onClick={() => handleSnackbarClose(true)}
+          >
+            UNDO
+          </Button>
+        ]}
+      />
     </div>
   )
 }

@@ -19,6 +19,7 @@ interface IProps {
   subtitle?: string
   date: string
   finished: boolean
+  expanded?: boolean
   onCheck?: () => void
   onLongPress?: (t?: CurrentTarget) => void
 }
@@ -27,6 +28,7 @@ const TaskItem: React.FC<IProps> = ({
   subtitle,
   date,
   finished,
+  expanded,
   onCheck,
   onLongPress
 }) => {
@@ -47,7 +49,7 @@ const TaskItem: React.FC<IProps> = ({
     : Object.create(null)
 
   return (
-    <ExpansionPanel {...longPressEvent}>
+    <ExpansionPanel {...longPressEvent} expanded={expanded}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         aria-label="Expand"
