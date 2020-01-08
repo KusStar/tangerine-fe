@@ -9,7 +9,7 @@ import {
   Typography
 } from '@material-ui/core'
 import { Task } from '@/interfaces'
-import TaskItem from '@/components/TaskItem'
+import SelectItem from './SelectItem'
 
 interface IProps {
   tasks: Task[]
@@ -31,23 +31,19 @@ const Selector: React.FC<IProps> = ({ tasks, checked, setChecked }) => {
     setChecked(newChecked)
   }
   return (
-    <Paper>
-      <List>
+    <>
         {tasks.map((task, i) => {
           return (
-            <ListItem key={i} dense button onClick={handleToggle(i)}>
-              <ListItemIcon>
-                <Checkbox checked={checked.indexOf(i) !== -1} disableRipple />
-              </ListItemIcon>
-              <ListItemText
-                primary={task.title}
-                secondary={task.description.slice(0, 10)}
-              />
-            </ListItem>
+            <SelectItem
+              key={i}
+              title={task.title}
+              subtitle={task.description}
+              finished={checked.indexOf(i) !== -1}
+              onClick={handleToggle(i)}
+          />
           )
         })}
-      </List>
-    </Paper>
+    </>
   )
 }
 
