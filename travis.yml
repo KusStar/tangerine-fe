@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "10.16.3"
+install: npm install
+script:
+  - npm run build
+  - docker build -t tangerine-fe-image .
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker push tangerine-fe-image
