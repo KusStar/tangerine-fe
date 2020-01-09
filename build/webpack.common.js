@@ -7,11 +7,12 @@ module.exports = {
     main: path.resolve(__dirname, '../src/index.tsx'),
     useLongPress: path.resolve(__dirname, '../src/components/useLongPress'),
     HeaderBar: path.resolve(__dirname, '../src/components/HeaderBar'),
-    TaskItem: path.resolve(__dirname, '../src/components/TaskItem')
+    TaskItem: path.resolve(__dirname, '../src/components/TaskItem'),
+    IconButton: path.resolve(__dirname, '../src/components/IconButton')
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: '[name].[hash:8].js'
+    filename: 'js/[name].[hash:8].js'
   },
   module: {
     rules: [
