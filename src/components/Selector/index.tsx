@@ -1,13 +1,4 @@
 import React, { Fragment } from 'react'
-import {
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Checkbox,
-  Typography
-} from '@material-ui/core'
 import { Task } from '@/interfaces'
 import SelectItem from './SelectItem'
 
@@ -32,17 +23,17 @@ const Selector: React.FC<IProps> = ({ tasks, checked, setChecked }) => {
   }
   return (
     <>
-        {tasks.map((task, i) => {
-          return (
-            <SelectItem
-              key={i}
-              title={task.title}
-              subtitle={task.description}
-              finished={checked.indexOf(i) !== -1}
-              onClick={handleToggle(i)}
+      {tasks.map((task, i) => {
+        return (
+          <SelectItem
+            key={i}
+            title={task.title}
+            subtitle={task.description}
+            finished={checked.indexOf(i) !== -1}
+            onClick={handleToggle(i)}
           />
-          )
-        })}
+        )
+      })}
     </>
   )
 }

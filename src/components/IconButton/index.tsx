@@ -11,12 +11,7 @@ const CustomIconButton: React.FC<IProps> = props => {
   const { onClick, children, style } = props
 
   return (
-    <IconButton
-      edge="start"
-      color="inherit"
-      onClick={onClick}
-      style={style}
-    >
+    <IconButton edge='start' color='inherit' onClick={onClick} style={style}>
       {children}
     </IconButton>
   )

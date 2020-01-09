@@ -4,7 +4,7 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Fade
+  Grow
 } from '@material-ui/core'
 import { ExpandMore } from '@material-ui/icons'
 
@@ -29,7 +29,7 @@ const TasksLayout: React.FC<IProps> = ({ tasks, onCheck, setChecked }) => {
   return (
     <>
       {finishedTasks.length > 0 && (
-        <Fade in={finishedTasks.length > 0}>
+        <Grow in={finishedTasks.length > 0}>
           <ExpansionPanel
             style={{
               background: 0
@@ -37,8 +37,8 @@ const TasksLayout: React.FC<IProps> = ({ tasks, onCheck, setChecked }) => {
           >
             <ExpansionPanelSummary
               expandIcon={<ExpandMore />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
+              aria-controls='panel2a-content'
+              id='panel2a-header'
             >
               <Typography>{finishedTasks.length} Finished</Typography>
             </ExpansionPanelSummary>
@@ -61,12 +61,12 @@ const TasksLayout: React.FC<IProps> = ({ tasks, onCheck, setChecked }) => {
               ))}
             </ExpansionPanelDetails>
           </ExpansionPanel>
-        </Fade>
+        </Grow>
       )}
       {unfinishedTasks.map((task, i) => {
         return (
           <TaskItem
-            key={i}
+            key={'task' + i}
             title={task.title}
             subtitle={task.description}
             date={task.date}

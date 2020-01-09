@@ -5,7 +5,7 @@ import HeaderBar from '@/components/HeaderBar'
 const Login: React.FC = () => {
   return (
     <Grid>
-      <HeaderBar title="Login" />
+      <HeaderBar title='Login' />
     </Grid>
   )
 }

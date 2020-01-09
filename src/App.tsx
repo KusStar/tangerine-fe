@@ -11,8 +11,8 @@ const App: React.FC = () => {
       <CssBaseline />
       <Router>
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} />
+          <Route exact path='/' component={Home} />
+          <Route path='/login' component={Login} />
         </Switch>
       </Router>
     </ThemeProvider>

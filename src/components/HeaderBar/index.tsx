@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Grow
-} from '@material-ui/core'
+import { AppBar, Toolbar, Typography, Grow } from '@material-ui/core'
 import {
   Menu,
   Add,
@@ -34,7 +29,7 @@ const HeaderBar: React.FC<IProps> = ({
   addTaskOpen,
   selectorState,
   setSelectorState,
-  onIconButton,
+  onIconButton
 }) => {
   const [checkedAll, setCheckedAll] = useState<boolean>(false)
 
@@ -66,26 +61,25 @@ const HeaderBar: React.FC<IProps> = ({
     setCheckedAll(!checkedAll)
   }
 
-  const isSelectorOpen = selectorState ? selectorState.open === true : false;
-  const selectorCheckedLength = selectorState ? selectorState.checked.length : 0;
+  const isSelectorOpen = selectorState ? selectorState.open === true : false
+  const selectorCheckedLength = selectorState ? selectorState.checked.length : 0
 
   return (
-    <AppBar position="fixed">
+    <AppBar position='fixed'>
       <Toolbar>
         {isSelectorOpen ? (
           <Grow in={isSelectorOpen}>
             <IconButton
               onClick={() =>
-                setSelectorState && setSelectorState({ open: false, checked: [] })
+                setSelectorState &&
+                setSelectorState({ open: false, checked: [] })
               }
             >
               <Close />
             </IconButton>
           </Grow>
         ) : (
-          <IconButton
-            onClick={onMenu}
-          >
+          <IconButton onClick={onMenu}>
             <Menu />
           </IconButton>
         )}
@@ -111,9 +105,7 @@ const HeaderBar: React.FC<IProps> = ({
               </Grow>
             )}
             <Grow in={true}>
-              <IconButton
-                onClick={handleToggleCheck}
-              >
+              <IconButton onClick={handleToggleCheck}>
                 {checkedAll ? <ClearAll /> : <SelectAll />}
               </IconButton>
             </Grow>

@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState, FocusEvent } from 'react'
+import React, { MouseEvent, FocusEvent } from 'react'
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
@@ -52,12 +52,12 @@ const TaskItem: React.FC<IProps> = ({
     <ExpansionPanel {...longPressEvent} expanded={expanded}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
-        aria-label="Expand"
+        aria-label='Expand'
         onClick={e => e.preventDefault()}
       >
         <FormControlLabel
           control={
-            <Checkbox color="secondary" checked={finished} onChange={onCheck} />
+            <Checkbox color='secondary' checked={finished} onChange={onCheck} />
           }
           onClick={defaultEvent}
           onFocus={defaultEvent}
@@ -68,7 +68,7 @@ const TaskItem: React.FC<IProps> = ({
       <ExpansionPanelDetails style={{ flexDirection: 'column' }}>
         {subtitle && <Typography>{subtitle}</Typography>}
         <Tooltip title={normal(date)}>
-          <Typography color="textSecondary">{auto(date)}</Typography>
+          <Typography color='textSecondary'>{auto(date)}</Typography>
         </Tooltip>
       </ExpansionPanelDetails>
     </ExpansionPanel>

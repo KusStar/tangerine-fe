@@ -19,27 +19,19 @@ const SelectItem: React.FC<IProps> = ({
   finished,
   onClick
 }) => {
-
   return (
-    <ExpansionPanel
-      expanded={false}
-    >
-      <ExpansionPanelSummary
-        aria-label="Expand"
-        onClick={onClick}  
-      >
+    <ExpansionPanel expanded={false}>
+      <ExpansionPanelSummary aria-label='Expand' onClick={onClick}>
         <FormControlLabel
           style={{
             pointerEvents: 'none'
           }}
-          control={
-            <Checkbox color="secondary" checked={finished}/>
-          }
+          control={<Checkbox color='secondary' checked={finished} />}
           label={
-          <>
-            <Typography>{title}</Typography>
-            <Typography color="textSecondary">{subtitle}</Typography>
-          </>
+            <>
+              <Typography>{title}</Typography>
+              <Typography color='textSecondary'>{subtitle}</Typography>
+            </>
           }
         />
       </ExpansionPanelSummary>

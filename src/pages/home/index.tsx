@@ -216,9 +216,9 @@ const Home: React.FC<RouteComponentProps> = props => {
         message={<span>{snackbarState.title}</span>}
         action={[
           <Button
-            key="undo"
-            color="secondary"
-            size="small"
+            key='undo'
+            color='secondary'
+            size='small'
             onClick={() => handleSnackbarClose(true)}
           >
             UNDO

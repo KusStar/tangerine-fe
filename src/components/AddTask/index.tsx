@@ -78,19 +78,19 @@ const AddTask: React.FC<IProps> = ({ onAdd, editState }) => {
           <form>
             <TextField
               autoFocus
-              margin="dense"
-              label="Title"
+              margin='dense'
+              label='Title'
               fullWidth
-              color="secondary"
+              color='secondary'
               multiline
               onChange={handleChange('title')}
               value={values.title}
             />
             <TextField
-              margin="dense"
-              label="Description"
+              margin='dense'
+              label='Description'
               fullWidth
-              color="secondary"
+              color='secondary'
               multiline
               onChange={handleChange('description')}
               value={values.description}
@@ -99,7 +99,7 @@ const AddTask: React.FC<IProps> = ({ onAdd, editState }) => {
         </CardContent>
       </Card>
       <Box mt={2}>
-        <Fab color="primary" onClick={handleAdd}>
+        <Fab color='primary' onClick={handleAdd}>
           <Add />
         </Fab>
       </Box>
