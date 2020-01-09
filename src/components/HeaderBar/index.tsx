@@ -3,8 +3,7 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  IconButton,
-  Fade
+  Grow
 } from '@material-ui/core'
 import {
   Menu,
@@ -16,8 +15,7 @@ import {
   Edit
 } from '@material-ui/icons'
 import { SelectorState, IconNameType } from '@/interfaces'
-
-const appName = 'Tangerine'
+import IconButton from '@/components/IconButton'
 
 interface IProps {
   title?: string
@@ -36,7 +34,7 @@ const HeaderBar: React.FC<IProps> = ({
   addTaskOpen,
   selectorState,
   setSelectorState,
-  onIconButton
+  onIconButton,
 }) => {
   const [checkedAll, setCheckedAll] = useState<boolean>(false)
 
@@ -45,7 +43,7 @@ const HeaderBar: React.FC<IProps> = ({
   }, [selectorState && selectorState.open])
 
   const getTitle = () => {
-    let text = title ? title : appName
+    let text = title ? title : ''
     if (selectorState) {
       const { open, checked } = selectorState
       if (open === true && checked) {
@@ -68,60 +66,62 @@ const HeaderBar: React.FC<IProps> = ({
     setCheckedAll(!checkedAll)
   }
 
+  const isSelectorOpen = selectorState ? selectorState.open === true : false;
+  const selectorCheckedLength = selectorState ? selectorState.checked.length : 0;
+
   return (
     <AppBar position="fixed">
       <Toolbar>
-        {selectorState && selectorState.open === true ? (
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="close"
-            onClick={() =>
-              setSelectorState && setSelectorState({ open: false, checked: [] })
-            }
-          >
-            <Close />
-          </IconButton>
+        {isSelectorOpen ? (
+          <Grow in={isSelectorOpen}>
+            <IconButton
+              onClick={() =>
+                setSelectorState && setSelectorState({ open: false, checked: [] })
+              }
+            >
+              <Close />
+            </IconButton>
+          </Grow>
         ) : (
           <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
             onClick={onMenu}
           >
             <Menu />
           </IconButton>
         )}
 
-        <Typography style={{ flexGrow: 1 }}>{getTitle()}</Typography>
-        {selectorState && selectorState.open === true ? (
+        <Grow in={isSelectorOpen}>
+          <Typography style={{ flexGrow: 1 }}>{getTitle()}</Typography>
+        </Grow>
+
+        {isSelectorOpen ? (
           <>
-            {selectorState.checked.length === 1 && (
-              <Fade in={selectorState.checked.length === 1}>
-                <IconButton edge="start" color="inherit" onClick={handleEdit}>
+            {selectorCheckedLength === 1 && (
+              <Grow in={selectorCheckedLength === 1}>
+                <IconButton onClick={handleEdit}>
                   <Edit />
                 </IconButton>
-              </Fade>
+              </Grow>
             )}
-            {selectorState.checked.length > 0 && (
-              <Fade in={selectorState.checked.length > 0}>
-                <IconButton edge="start" color="inherit" onClick={handleDelete}>
+            {selectorCheckedLength > 0 && (
+              <Grow in={selectorCheckedLength > 0}>
+                <IconButton onClick={handleDelete}>
                   <Delete />
                 </IconButton>
-              </Fade>
+              </Grow>
             )}
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleToggleCheck}
-            >
-              {checkedAll ? <ClearAll /> : <SelectAll />}
-            </IconButton>
+            <Grow in={true}>
+              <IconButton
+                onClick={handleToggleCheck}
+              >
+                {checkedAll ? <ClearAll /> : <SelectAll />}
+              </IconButton>
+            </Grow>
           </>
         ) : (
           <>
             {onAdd && (
-              <IconButton edge="start" color="inherit" onClick={onAdd}>
+              <IconButton onClick={onAdd}>
                 {addTaskOpen === true ? <Close /> : <Add />}
               </IconButton>
             )}
