@@ -6,4 +6,5 @@ script:
   - npm run build
   - docker build -t tangerine-fe-image .
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
-  - docker push tangerine-fe-image
+  - docker tag tangerine-fe-image $DOCKER_USER/tangerine-fe-image
+  - docker push $DOCKER_USER/tangerine-fe-image
