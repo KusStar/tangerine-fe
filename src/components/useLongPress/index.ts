@@ -1,17 +1,13 @@
 import React, { useState, useEffect, MouseEvent } from 'react'
 
-export type CurrentTarget = HTMLElement | null
-
-const useLongPress = (callback = (t: CurrentTarget) => {}, ms = 300) => {
+const useLongPress = (callback = () => {}, ms = 300) => {
   const [startLongPress, setStartLongPress] = useState<boolean>(false)
-  const [currentTarget, setCurrentTarget] = useState<CurrentTarget>(null)
 
   useEffect(() => {
     let timer: any
     if (startLongPress) {
-      timer = setTimeout(() => callback(currentTarget), ms)
+      timer = setTimeout(() => callback(), ms)
     } else {
-      setCurrentTarget(null)
       clearTimeout(timer)
     }
     return () => {
@@ -19,16 +15,19 @@ const useLongPress = (callback = (t: CurrentTarget) => {}, ms = 300) => {
     }
   }, [startLongPress])
 
-  const handleStartEvent = (event: MouseEvent<HTMLElement>) => {
+  const handleStartEvent = () => {
     setStartLongPress(true)
-    setCurrentTarget(event.currentTarget)
+  }
+
+  const handleEndEvent = () => {
+    setStartLongPress(false)
   }
   return {
     onMouseDown: handleStartEvent,
-    onMouseUp: () => setStartLongPress(false),
-    onMouseLeave: () => setStartLongPress(false),
+    onMouseUp: handleEndEvent,
+    onMouseLeave: handleEndEvent,
     onTouchStart: handleStartEvent,
-    onTouchEnd: () => setStartLongPress(false)
+    onTouchEnd: handleEndEvent
   }
 }
 

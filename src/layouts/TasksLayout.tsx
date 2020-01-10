@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Typography,
   ExpansionPanel,
@@ -20,6 +20,7 @@ interface IProps {
 const TasksLayout: React.FC<IProps> = ({ tasks, onCheck, setChecked }) => {
   const unfinishedTasks = tasks.filter(task => task.finished === false)
   const finishedTasks = tasks.filter(task => task.finished === true)
+
   const handleLongPress = (task?: Task) => {
     if (task) {
       const index = tasks.findIndex(it => Filter.sourceEqualTarget(it, task))

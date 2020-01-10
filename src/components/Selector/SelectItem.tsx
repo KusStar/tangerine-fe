@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState, FocusEvent } from 'react'
+import React from 'react'
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
