@@ -184,6 +184,7 @@ const Home: React.FC<RouteComponentProps> = props => {
           <Selector
             tasks={tasks}
             checked={selectorState.checked}
+            setTasks={setTasks}
             setChecked={(checked: number[]) =>
               setSelectorState({
                 ...selectorState,

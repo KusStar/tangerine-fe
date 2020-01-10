@@ -6,6 +6,11 @@ import {
   Checkbox,
   Typography
 } from '@material-ui/core'
+import { SortableHandle } from 'react-sortable-hoc'
+
+import { DragHandle as DragHandleIcon } from '@material-ui/icons'
+
+const DragHandle = SortableHandle(() => <DragHandleIcon disabled />)
 
 interface IProps {
   title: string
@@ -20,8 +25,12 @@ const SelectItem: React.FC<IProps> = ({
   onClick
 }) => {
   return (
-    <ExpansionPanel expanded={false}>
-      <ExpansionPanelSummary aria-label='Expand' onClick={onClick}>
+    <ExpansionPanel expanded={false} style={{ borderRadius: 0 }}>
+      <ExpansionPanelSummary
+        onClick={onClick}
+        expandIcon={<DragHandle />}
+        disableRipple
+      >
         <FormControlLabel
           style={{
             pointerEvents: 'none'
