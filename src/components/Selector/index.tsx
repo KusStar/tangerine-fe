@@ -1,6 +1,5 @@
 import React from 'react'
-import { Task } from '@/interfaces'
-import SelectItem from './SelectItem'
+import { Task, SnackbarState } from '@/interfaces'
 import {
   SortableContainer,
   SortableElement,
@@ -8,11 +7,15 @@ import {
   SortableContainerProps,
   SortableElementProps
 } from 'react-sortable-hoc'
+
+import SelectItem from './SelectItem'
+
 interface ISelectorProps {
   tasks: Task[]
   checked: number[]
   setChecked: (checked: number[]) => void
   setTasks: (tasks: Task[]) => void
+  setSnackbarState: (snackbarState: SnackbarState) => void
 }
 
 interface ISortableContainerProps extends SortableContainerProps {
@@ -29,7 +32,8 @@ const Selector: React.FC<ISelectorProps> = ({
   tasks,
   checked,
   setChecked,
-  setTasks
+  setTasks,
+  setSnackbarState
 }) => {
   const handleToggle = (index: number) => () => {
     const currentIndex = checked.indexOf(index)
@@ -53,6 +57,12 @@ const Selector: React.FC<ISelectorProps> = ({
     newTasks.splice(oldIndex, 1)
     newTasks.splice(newIndex, 0, oldTask)
     setTasks(newTasks)
+
+    setSnackbarState({
+      open: true,
+      title: 'Sorted',
+      pastTasks: tasks
+    })
   }
 
   const SortableItem = SortableElement(

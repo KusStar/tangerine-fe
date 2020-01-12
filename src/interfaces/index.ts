@@ -11,7 +11,7 @@ export interface EditState {
 
 export interface SnackbarState {
   open: boolean
-  title: 'Added' | 'Deleted' | 'Updated' | ''
+  title: 'Added' | 'Deleted' | 'Updated' | 'Sorted' | ''
   targetTask?: Task
   pastTasks?: Task[]
 }

@@ -191,6 +191,7 @@ const Home: React.FC<RouteComponentProps> = props => {
                 checked: checked
               })
             }
+            setSnackbarState={setSnackbarState}
           />
         ) : (
           <>
