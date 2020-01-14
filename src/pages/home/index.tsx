@@ -126,26 +126,32 @@ const Home: React.FC<RouteComponentProps> = props => {
     })
   }
 
+  const generateNewChecked = () => {
+    const fullChecked = Array.from(new Array(tasks.length).keys())
+    const unfinishedChecked = fullChecked.filter(
+      index => !tasks[index].finished
+    )
+    return unfinishedChecked
+  }
+
   const onIconButton = (iconName: IconNameType) => {
-    let newChecked = selectorState.checked
+    let newChecked: number[] = []
     let newOpen = selectorState.open
     switch (iconName) {
       case 'SelectAll':
-        newChecked = Array.from(new Array(tasks.length).keys())
+        newChecked = generateNewChecked()
         break
       case 'ClearAll':
-        newChecked = []
+        // pass
         break
       case 'Edit':
         const targetTaskIndex = selectorState.checked[0]
         onEdit(tasks[targetTaskIndex])
         newOpen = false
-        newChecked = []
         break
       case 'Delete':
         onDelete(selectorState.checked)
         newOpen = false
-        newChecked = []
     }
     setSelectorState({
       open: newOpen,
