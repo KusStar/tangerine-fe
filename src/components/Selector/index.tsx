@@ -35,7 +35,6 @@ const Selector: React.FC<ISelectorProps> = ({
   setTasks,
   setSnackbarState
 }) => {
-
   const handleToggle = (index: number) => () => {
     const currentIndex = checked.indexOf(index)
     const newChecked = [...checked]
@@ -83,21 +82,23 @@ const Selector: React.FC<ISelectorProps> = ({
     ({ tasks }: ISortableContainerProps) => {
       return (
         <ul style={{ padding: 0, margin: 0 }}>
-          {tasks.map((task: Task, index: number) => 
-          !task.finished && (
-            <SortableItem
-              key={`item-${index}`}
-              index={index}
-              task={task}
-              finished={checked.indexOf(index) !== -1}
-              onClick={handleToggle(index)}
-            />
-          ))}
+          {tasks.map(
+            (task: Task, index: number) =>
+              !task.finished && (
+                <SortableItem
+                  key={`item-${index}`}
+                  index={index}
+                  task={task}
+                  finished={checked.indexOf(index) !== -1}
+                  onClick={handleToggle(index)}
+                />
+              )
+          )}
         </ul>
       )
     }
   )
-  
+
   return <SortableList tasks={tasks} onSortEnd={onSortEnd} useDragHandle />
 }
 

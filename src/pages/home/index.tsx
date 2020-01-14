@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
+import { Container, Snackbar, Button } from '@material-ui/core'
+import { Menu, Add, Close } from '@material-ui/icons'
 import HeaderBar from '@/components/HeaderBar'
 import Drawer from '@/components/Drawer'
 import AddTask from '@/components/AddTask'
-import { Container, Snackbar, Button } from '@material-ui/core'
 import request from '@/utils/request'
 import Filter from '@/utils/filter'
 import {
@@ -15,6 +16,7 @@ import {
 } from '@/interfaces'
 import TasksLayout from '@/layouts/TasksLayout'
 import Selector from '@/components/Selector'
+import SelectorHeader from '@/components/Selector/Header'
 import storage from '@/utils/storage'
 
 import useStyles from './style'
@@ -174,16 +176,28 @@ const Home: React.FC<RouteComponentProps> = props => {
 
   return (
     <div>
-      <HeaderBar
-        onMenu={() => setDrawerOpen(true)}
-        onAdd={() => setAddTaskOpen(!addTaskOpen)}
-        addTaskOpen={addTaskOpen}
-        selectorState={selectorState}
-        setSelectorState={newSelectorState =>
-          setSelectorState(newSelectorState)
-        }
-        onIconButton={iconName => onIconButton(iconName)}
-      />
+      {selectorState.open ? (
+        <SelectorHeader
+          selectorState={selectorState}
+          setSelectorState={setSelectorState}
+          onIconButton={iconName => onIconButton(iconName)}
+          unfinishedLength={tasks.filter(it => !it.finished).length}
+        />
+      ) : (
+        <HeaderBar
+          leftButton={{
+            Icon: <Menu />,
+            onClick: () => setDrawerOpen(true)
+          }}
+          rightButtons={[
+            {
+              Icon: addTaskOpen === true ? <Close /> : <Add />,
+              onClick: () => setAddTaskOpen(!addTaskOpen)
+            }
+          ]}
+        />
+      )}
+
       <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <Container className={styles.container}>
         {selectorState.open === true ? (
