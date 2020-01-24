@@ -11,7 +11,6 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
 import dateFormatter from '@/utils/formatter/date'
 import useLongPress from '@/components/useLongPress'
-import { CurrentTarget } from '@/components/useLongPress'
 
 const { auto, normal } = dateFormatter
 interface IProps {
@@ -21,7 +20,7 @@ interface IProps {
   finished: boolean
   expanded?: boolean
   onCheck?: () => void
-  onLongPress?: (t?: CurrentTarget) => void
+  onLongPress?: () => void
 }
 const TaskItem: React.FC<IProps> = ({
   title,
@@ -45,11 +44,11 @@ const TaskItem: React.FC<IProps> = ({
   }
 
   const longPressEvent = onLongPress
-    ? useLongPress(onLongPress)
+    ? useLongPress(onLongPress, { isPreventDefault: false })
     : Object.create(null)
 
   return (
-    <ExpansionPanel {...longPressEvent} expanded={expanded}>
+    <ExpansionPanel {...longPressEvent} expanded={expanded} TransitionProps={{ unmountOnExit: true }}>
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         aria-label='Expand'
