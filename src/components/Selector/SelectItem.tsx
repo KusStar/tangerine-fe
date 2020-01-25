@@ -17,18 +17,20 @@ interface IProps {
   subtitle?: string
   finished: boolean
   onClick: () => void
+  draggable: boolean
 }
 const SelectItem: React.FC<IProps> = ({
   title,
   subtitle,
   finished,
-  onClick
+  onClick,
+  draggable
 }) => {
   return (
     <ExpansionPanel expanded={false} style={{ borderRadius: 0 }}>
       <ExpansionPanelSummary
         onClick={onClick}
-        expandIcon={<DragHandle />}
+        expandIcon={draggable && <DragHandle />}
         disableRipple
       >
         <FormControlLabel

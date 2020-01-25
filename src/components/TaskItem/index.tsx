@@ -15,8 +15,8 @@ import useLongPress from '@/components/useLongPress'
 const { auto, normal } = dateFormatter
 interface IProps {
   title: string
-  subtitle?: string
   date: string
+  subtitle?: string
   finished: boolean
   expanded?: boolean
   onCheck?: () => void
@@ -48,7 +48,11 @@ const TaskItem: React.FC<IProps> = ({
     : Object.create(null)
 
   return (
-    <ExpansionPanel {...longPressEvent} expanded={expanded} TransitionProps={{ unmountOnExit: true }}>
+    <ExpansionPanel
+      {...longPressEvent}
+      expanded={expanded}
+      TransitionProps={{ unmountOnExit: true }}
+    >
       <ExpansionPanelSummary
         expandIcon={<ExpandMoreIcon />}
         aria-label='Expand'

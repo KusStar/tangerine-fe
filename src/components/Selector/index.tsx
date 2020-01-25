@@ -14,8 +14,9 @@ interface ISelectorProps {
   tasks: Task[]
   checked: number[]
   setChecked: (checked: number[]) => void
-  setTasks: (tasks: Task[]) => void
-  setSnackbarState: (snackbarState: SnackbarState) => void
+  setTasks?: (tasks: Task[]) => void
+  setSnackbarState?: (snackbarState: SnackbarState) => void
+  draggable?: boolean
 }
 
 interface ISortableContainerProps extends SortableContainerProps {
@@ -33,7 +34,8 @@ const Selector: React.FC<ISelectorProps> = ({
   checked,
   setChecked,
   setTasks,
-  setSnackbarState
+  setSnackbarState,
+  draggable = true
 }) => {
   const handleToggle = (index: number) => () => {
     const currentIndex = checked.indexOf(index)
@@ -56,13 +58,14 @@ const Selector: React.FC<ISelectorProps> = ({
     let newTasks = [...tasks]
     newTasks.splice(oldIndex, 1)
     newTasks.splice(newIndex, 0, oldTask)
-    setTasks(newTasks)
+    setTasks && setTasks(newTasks)
 
-    setSnackbarState({
-      open: true,
-      title: 'Sorted',
-      pastTasks: tasks
-    })
+    setSnackbarState &&
+      setSnackbarState({
+        open: true,
+        title: 'Sorted',
+        pastTasks: tasks
+      })
   }
 
   const SortableItem = SortableElement(
@@ -73,6 +76,7 @@ const Selector: React.FC<ISelectorProps> = ({
           subtitle={task.description}
           finished={finished}
           onClick={onClick}
+          draggable={draggable}
         />
       </li>
     )

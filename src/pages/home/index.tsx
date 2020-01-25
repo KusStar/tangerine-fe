@@ -19,7 +19,7 @@ import Selector from '@/components/Selector'
 import SelectorHeader from '@/components/Selector/Header'
 import storage from '@/utils/storage'
 
-import useStyles from './style'
+import useStyles from '@/theme/container.style'
 
 const Home: React.FC<RouteComponentProps> = props => {
   const styles = useStyles()
@@ -56,21 +56,21 @@ const Home: React.FC<RouteComponentProps> = props => {
     }
   }, [addTaskOpen])
 
-  const tasksSorter = (a: Task, b: Task) => {
-    const left = parseInt(a.date, 10)
-    const right = parseInt(b.date, 10)
-    return right - left
-  }
+  // const tasksSorter = (a: Task, b: Task) => {
+  //   const left = parseInt(a.date, 10)
+  //   const right = parseInt(b.date, 10)
+  //   return right - left
+  // }
 
-  const requestTasks = async () => {
-    if (requested === false) {
-      const res = await request('tasks')
-      const { data } = res
-      setTasks(tasks.concat(data.tasks))
+  // const requestTasks = async () => {
+  //   if (requested === false) {
+  //     const res = await request('tasks')
+  //     const { data } = res
+  //     setTasks(tasks.concat(data.tasks))
 
-      setRequested(true)
-    }
-  }
+  //     setRequested(true)
+  //   }
+  // }
 
   const targetTaskIndex = (task: Task) => {
     return tasks.findIndex(
@@ -162,11 +162,13 @@ const Home: React.FC<RouteComponentProps> = props => {
   }
 
   const handleSnackbarClose = (undo: boolean) => {
+    if (!snackbarState.open) return
     if (undo === true && snackbarState.pastTasks) {
       setTasks(snackbarState.pastTasks)
     } else {
       // TODO: request remote API
       // Add task or delete task
+      finalTasksChange(snackbarState)
     }
     setSnackbarState({
       open: false,
@@ -174,8 +176,25 @@ const Home: React.FC<RouteComponentProps> = props => {
     })
   }
 
+  const finalTasksChange = (state: SnackbarState) => {
+    const { title, pastTasks } = state
+    if (pastTasks && pastTasks.length > 0) {
+      switch (title) {
+        case 'Deleted':
+          const deleted = Filter.diff(pastTasks, tasks)
+          const result = Filter.union(storage.dustbin, deleted)
+          storage.dustbin = result
+          break
+      }
+    }
+  }
+
+  const onDrawerClose = () => {
+    setDrawerOpen(false)
+  }
+
   return (
-    <div>
+    <>
       {selectorState.open ? (
         <SelectorHeader
           selectorState={selectorState}
@@ -198,7 +217,8 @@ const Home: React.FC<RouteComponentProps> = props => {
         />
       )}
 
-      <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <Drawer open={drawerOpen} onClose={onDrawerClose} routerProps={props} />
+
       <Container className={styles.container}>
         {selectorState.open === true ? (
           <Selector
@@ -247,7 +267,7 @@ const Home: React.FC<RouteComponentProps> = props => {
           </Button>
         ]}
       />
-    </div>
+    </>
   )
 }
 

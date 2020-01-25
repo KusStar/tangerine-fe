@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
+import { RouteComponentProps } from 'react-router-dom'
 import {
   Drawer,
   List,
@@ -6,14 +7,42 @@ import {
   ListItemIcon,
   ListItemText
 } from '@material-ui/core'
-import { Inbox, Mail } from '@material-ui/icons'
+import { AccountBox, DeleteOutline } from '@material-ui/icons'
 
-interface IProps {
+interface CustomDrawerProps {
   open: boolean
   onClose: () => void
+  routerProps: RouteComponentProps
+}
+interface DrawerItem {
+  Icon: ReactElement
+  name: string
 }
 
-const CustomDrawer: React.FC<IProps> = ({ open, onClose }) => {
+const items: DrawerItem[] = [
+  {
+    Icon: <AccountBox />,
+    name: 'Account'
+  },
+  {
+    Icon: <DeleteOutline />,
+    name: 'Dustbin'
+  }
+]
+
+const CustomDrawer: React.FC<CustomDrawerProps> = ({
+  open,
+  onClose,
+  routerProps
+}) => {
+  const onItem = (name: string) => {
+    const { history } = routerProps
+    switch (name) {
+      case 'Dustbin':
+        history.push('/dustbin')
+        break
+    }
+  }
   return (
     <Drawer open={open} onClose={onClose}>
       <List
@@ -21,12 +50,14 @@ const CustomDrawer: React.FC<IProps> = ({ open, onClose }) => {
           width: 250
         }}
       >
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <Inbox /> : <Mail />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
+        {items.map((item, index) => (
+          <ListItem
+            button
+            key={item.name + index}
+            onClick={() => onItem(item.name)}
+          >
+            <ListItemIcon>{item.Icon}</ListItemIcon>
+            <ListItemText primary={item.name} />
           </ListItem>
         ))}
       </List>

@@ -13,20 +13,20 @@ import { Task, EditState } from '@/interfaces'
 
 import Snackbar from '@/components/Snackbar'
 
-interface IProps {
+interface AddTaskProps {
   onAdd: (task: Task, editState: EditState) => void
   editState: EditState
 }
-interface IState {
+interface InputState {
   title: string
   description: string
 }
 
 const INPUT_SOMETHING = 'You must input something'
 
-const AddTask: React.FC<IProps> = ({ onAdd, editState }) => {
+const AddTask: React.FC<AddTaskProps> = ({ onAdd, editState }) => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
-  const [values, setValues] = useState<IState>({
+  const [values, setValues] = useState<InputState>({
     title: '',
     description: ''
   })
@@ -41,7 +41,7 @@ const AddTask: React.FC<IProps> = ({ onAdd, editState }) => {
     }
   }, [editState.editedTask])
 
-  const handleChange = (prop: keyof IState) => (
+  const handleChange = (prop: keyof InputState) => (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setValues({ ...values, [prop]: event.target.value })

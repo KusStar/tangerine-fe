@@ -7,13 +7,13 @@ interface BasicButton {
   onClick: () => void
 }
 
-interface IProps {
+interface HeaderProps {
   title?: string
   leftButton?: BasicButton
   rightButtons?: BasicButton[]
 }
 
-const HeaderBar: React.FC<IProps> = ({ title, leftButton, rightButtons }) => {
+const HeaderBar: React.FC<HeaderProps> = ({ title, leftButton, rightButtons }) => {
   return (
     <AppBar position='fixed'>
       <Toolbar>
