@@ -24,7 +24,7 @@
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "react-sortable-hoc": "^1.10.1",
-    "webrtc-adapter": "^7.5.0"
+    "simple-peer": "^9.6.2"
   },
   "devDependencies": {
     "@types/webpack-env": "^1.14.1",
