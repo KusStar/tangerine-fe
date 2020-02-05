@@ -1,41 +1,44 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
-var Peer = require('simple-peer')
+import { useState, useRef, useEffect } from 'react'
+const Peer = require('simple-peer')
 
-interface Signature {
-  type: string
-  sdp: string
-}
-
-const useWebRTC = () => {
-  const p: ReturnType<typeof Peer> = new Peer({
-    initiator: location.hash === '#1',
-  })
-  const [signature, setSignature] = useState<string>('')
+const useWebRTC = (initiator = true) => {
+  const p = useRef<ReturnType<typeof Peer>>(
+    new Peer({
+      initiator: initiator
+    })
+  )
+  const [signatures, setSignatures] = useState<string[]>([])
 
   useEffect(() => {
-    p.on('error', (err: unknown) => console.log('error', err))
-
-    p.on('signal', (data: unknown) => {
-      console.log('SIGNAL', data)
-      setSignature(JSON.stringify(data))
+    p.current.on('error', (err: unknown) => console.log('error', err))
+    p.current.on('connect', () => {
+      p.current.send('whatever' + Math.random())
     })
-
-    p.on('connect', () => {
-      console.log('CONNECT')
-      p.send('whatever' + Math.random())
-    })
-
-    p.on('data', (data: unknown) => {
+    p.current.on('data', (data: unknown) => {
       console.log('data: ' + data)
     })
-    console.log(signature)
-  }, [])
+  }, [p])
 
-  const onSignal = useCallback((outterSignature?: string) => {
-    p.signal(JSON.parse(outterSignature || signature))
-  }, [])
+  useEffect(() => {
+    p.current.on('signal', handleSignal)
+  }, [signatures])
 
-  return [signature, setSignature, onSignal] as const
+  const handleSignal = (data: unknown) => {
+    setSignatures(signatures.concat(JSON.stringify(data)))
+  }
+
+  const onSignal = () => {
+    for (let signature of signatures) {
+      if (signature) p.current.signal(JSON.parse(signature))
+    }
+    if (initiator === false) setSignatures([])
+  }
+
+  const onSend = () => {
+    p.current.send('whatever' + Math.random())
+  }
+
+  return [signatures, setSignatures, onSignal, onSend] as const
 }
 
 export default useWebRTC
