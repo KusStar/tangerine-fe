@@ -1,6 +1,6 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { Container, TextField } from '@material-ui/core'
+import { Container, TextField, Typography } from '@material-ui/core'
 import { Close, Send } from '@material-ui/icons'
 import HeaderBar from '@/components/HeaderBar'
 import IconButton from '@/components/IconButton'
@@ -9,16 +9,10 @@ import useWebRTC from '@/utils/webrtc'
 
 const Space: React.FC<RouteComponentProps> = props => {
   const styles = useStyles()
-  const [signatures, setSignatures, onSignal, onSend] = useWebRTC(
-    location.hash === '#1'
-  )
+  const [id, data, onSend] = useWebRTC(location.hash === '#1')
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let text = event.target.value
-    let newSignatures = text.split('$$$__SPLIT__$$$')
-    if (newSignatures) {
-      setSignatures(newSignatures)
-    }
+    onSend(event.target.value)
   }
 
   return (
@@ -31,12 +25,7 @@ const Space: React.FC<RouteComponentProps> = props => {
         }}
       />
       <Container className={styles.container}>
-        <IconButton onClick={() => onSignal()}>
-          <Send />
-        </IconButton>
-        <IconButton onClick={() => onSend()}>
-          <Send />
-        </IconButton>
+        <Typography>{id}</Typography>
         <TextField
           margin='dense'
           label='Description'
@@ -44,8 +33,11 @@ const Space: React.FC<RouteComponentProps> = props => {
           color='secondary'
           multiline
           onChange={handleTextChange}
-          value={signatures.join('$$$__SPLIT__$$$')}
+          value={data}
         />
+        <IconButton onClick={() => onSend(Math.random().toString())}>
+          <Send />
+        </IconButton>
       </Container>
     </>
   )
